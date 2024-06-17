@@ -2,6 +2,7 @@ monitor = peripheral.find("monitor")
 
 function download_images()
     shell.run("wget https://raw.githubusercontent.com/darthzapp/Minecraft-SGJurney-CC-Dialing-Program/main/sg_idle.nfp sg_idle.nfp")
+    print("[info] downloaded sg_idle.nfp ")
 end
 
 function draw_image()
