@@ -40,4 +40,5 @@ White: back <br />
 Black: next <br />
 Red: reset [MODE]: delete the current address <br />
 Lime: dial / disconnect [MODE]: add a new address <br />
+The mode gets activated with a lever on the blue chanal
 
