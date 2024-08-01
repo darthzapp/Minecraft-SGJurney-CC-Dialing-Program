@@ -105,8 +105,10 @@ end
 function dial(address)
     sg_type = interface.getStargateType()
     if sg_type == "sgjourney:milky_way_stargate"then
+        print("dialing in manual mode")
         dial_manual(address) 
     else
+        print("dialing in automatic mode")
         dial_automatic(address)
     end
 end
