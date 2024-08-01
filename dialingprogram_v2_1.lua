@@ -305,7 +305,7 @@ while true do
                 dial(encoded_address)
             end
         end
-        while redstone.testBundledInput("back", colors.blue) do
+        while redstone.testBundledInput("back", colors.lime) do
             sleep(0.3)
         end
     end
