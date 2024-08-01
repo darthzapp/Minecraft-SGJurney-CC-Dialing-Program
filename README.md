@@ -16,7 +16,11 @@ Computercraft control program for the Stargate Journey minecraft Mod
 <br /> 
 <br />
 <br />
-**How to use:** <br />
+**How to use:** 
+<br />
+<br />
+new addresses need to be written directly into the computer in all versions
+<br />
 <br />
 **V1:** <br />
 the dialingprogram_v1.lua uses a floppydisc per address to stimely use it with redstone buttons <br />
