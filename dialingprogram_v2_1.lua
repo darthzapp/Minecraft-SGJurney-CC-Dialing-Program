@@ -104,7 +104,7 @@ end
 -- MAIN DIALING CODE
 function dial(address)
     sg_type = interface.getStargateType()
-    if sg_type == "sgjourney:milky_way_stargate"then
+    if sg_type == "sgjourney:milky_way_stargate" or "milky_way_stargate" then
         print("dialing in manual mode")
         dial_manual(address) 
     else
