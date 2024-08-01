@@ -22,13 +22,13 @@ Computercraft control program for the Stargate Journey minecraft Mod
 new addresses need to be written directly into the computer in all versions
 <br />
 <br />
-**V1:** <br />
+**V1:** *(supports a monitor)* <br />
 the dialingprogram_v1.lua uses a floppydisc per address to stimely use it with redstone buttons <br />
 Redstone from the top start the dialing. <br />
 Redstone from the bottom rewites the floppydisc. <br />
 <br />
 <br />
-**V2:** <br />
+**V2:** *(does not support a monitor)* <br />
 Redstone from the top start the dialing. <br />
 left counts down right counts up. <br />
 front sets first address. <br />
@@ -37,7 +37,7 @@ Redstone from the bottom enables the editing mode. <br />
 left adds new address <br />
 right deletes the current chosen address <br />
 
-**V2.1:** <br />
+**V2.1:** *(supports a monitor)* <br />
 Conect a bundled cable from project red transmission from behind<br />
 *Channals:* <br />
 White: back <br />
