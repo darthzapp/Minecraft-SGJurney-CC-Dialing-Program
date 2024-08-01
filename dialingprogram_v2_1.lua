@@ -215,11 +215,11 @@ function draw_text(label, address, status)
     if monitor then
         monitor.clear()
         monitor.setTextScale(1)
-        monitor.setCursorPos(12,1)
+        monitor.setCursorPos(1,1)
         monitor.write(status)
-        monitor.setCursorPos(14,2)
+        monitor.setCursorPos(1,2)
         monitor.write(label)
-        monitor.setCursorPos(7,3)
+        monitor.setCursorPos(1,3)
         monitor.write(address)
     end
 end
