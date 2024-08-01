@@ -104,10 +104,10 @@ end
 -- MAIN DIALING CODE
 function dial(address)
     sg_type = interface.getStargateType()
-    if sg_type == "sgjourney:universe_stargate" or "sgjourney:pegasus_stargate" or "sgjourney:tollan_stargate" or "sgjourney:classic_stargate" then
-        dial_automatic(address)
+    if sg_type == "sgjourney:milky_way_stargate"then
+        dial_manual(address) 
     else
-        dial_manual(address)
+        dial_automatic(address)
     end
 end
 --------------------------------------------------------------------
