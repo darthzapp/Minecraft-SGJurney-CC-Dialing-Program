@@ -300,7 +300,7 @@ while true do
         else
             if interface.isStargateConnected() then
                 interface.disconnectStargate()
-            elseif interface.getDialedAddress() then
+            elseif interface.getConnectedAddress() then
                 interface.disconnectStargate()
             else
                 print("Destination: " .. label)
