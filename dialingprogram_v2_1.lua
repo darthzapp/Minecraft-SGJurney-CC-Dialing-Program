@@ -1,4 +1,4 @@
--- Initialisierung 
+-- Initialisierung
 
 interface = peripheral.find("crystal_interface")
 redstone = peripheral.find("bundled_cable")
@@ -299,6 +299,8 @@ while true do
             addLineIntoFile(new_adress_str)
         else
             if interface.isStargateConnected() then
+                interface.disconnectStargate()
+            elseif getChevronsEngaged() > 0 then
                 interface.disconnectStargate()
             else
                 print("Destination: " .. label)
