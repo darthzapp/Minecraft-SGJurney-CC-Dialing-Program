@@ -263,6 +263,7 @@ while true do
             deleteLineFromFile(counter)
         else
             counter = 1
+            interface.disconnectStargate()
         end
         while redstone.testBundledInput("back", colors.red) do
             sleep(0.3)
@@ -299,8 +300,6 @@ while true do
             addLineIntoFile(new_adress_str)
         else
             if interface.isStargateConnected() then
-                interface.disconnectStargate()
-            elseif interface.getConnectedAddress() then
                 interface.disconnectStargate()
             else
                 print("Destination: " .. label)
