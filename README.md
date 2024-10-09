@@ -16,6 +16,12 @@ Computercraft control program for the Stargate Journey minecraft Mod
 <br /> 
 <br />
 <br />
+**V2.2**: 
+<br />
+```wget https://raw.githubusercontent.com/darthzapp/Minecraft-SGJurney-CC-Dialing-Program/main/dialingprogram_v2_2.lua startup``` 
+<br /> 
+<br />
+<br />
 **How to use:** 
 <br />
 <br />
@@ -45,4 +51,7 @@ Black: next <br />
 Red: reset [MODE]: delete the current address <br />
 Lime: dial / disconnect [MODE]: add a new address <br />
 The mode gets activated with a lever on the blue chanal
+
+**V2.2:** *(supports an iris)* <br />
+to toggle the iris set a redstonesignal to the oink channal
 
