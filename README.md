@@ -16,7 +16,7 @@ Computercraft control program for the Stargate Journey minecraft Mod
 <br /> 
 <br />
 <br />
-**V2.2**: 
+**V2.2**(BETA) bugs can occur: 
 <br />
 ```wget https://raw.githubusercontent.com/darthzapp/Minecraft-SGJurney-CC-Dialing-Program/main/dialingprogram_v2_2.lua startup``` 
 <br /> 
