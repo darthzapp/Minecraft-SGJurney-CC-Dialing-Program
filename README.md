@@ -90,12 +90,12 @@ White: back <br />
 Black: next <br />
 Red: reset [MODE]: delete the current address <br />
 Lime: dial / disconnect [MODE]: add a new address <br />
-The mode gets activated with a lever on the blue chanal
+The mode gets activated with a lever on the blue chanal<br />
 
 ### **V2.2:** *(supports an iris)*
-*added automatic iris closing and opening*
-*added automatic iris code sending*
-to toggle the iris set a redstonesignal to the pink channal
+*added automatic iris closing and opening*<br />
+*added automatic iris code sending*<br />
+to toggle the iris set a redstonesignal to the pink channal<br />
 a switch at the gray channal enters a IRIS editing mode
 
 
