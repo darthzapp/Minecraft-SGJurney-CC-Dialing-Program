@@ -35,7 +35,7 @@ else
 end
 
 if redstone then
-    print("[INFO] Bundled Cable not connected")
+    print("[INFO] Bundled Cable connected")
     print("[INFO] white = back, black = next, red = reset, blue = mode, lime = dial")
     print("[INFO] MODE: red = del, lime = add - mode switch has to be a lever")
 else
@@ -110,7 +110,8 @@ end
 -- MAIN DIALING CODE
 function dial(address)
     sg_type = interface.getStargateType()
-    if sg_type == "sgjourney:milky_way_stargate" or "milky_way_stargate" then
+    print(sg_type)
+    if sg_type == "sgjourney:milky_way_stargate" or sg_type == "milky_way_stargate" then
         print("dialing in manual mode")
         dial_manual(address) 
     else
@@ -121,11 +122,64 @@ end
 --------------------------------------------------------------------
 -- END DIALING
 --------------------------------------------------------------------
-local counter = 0
-local filename = "data.txt"
+--------------------------------------------------------------------
+-- START SETTINGS
+--------------------------------------------------------------------
+local settings_filename = "config.txt"
+
+local function loadData()
+    local data = {}
+
+    if fs.exists(settings_filename) then
+        local file = fs.open(settings_filename, "r")
+        if file then
+            while true do
+                local line = file.readLine()
+                if not line then break end
+                local key, value = string.match(line, "^(.-) = (.*)$")
+                if key and value then
+                    data[key] = value
+                end
+            end
+            file.close()
+        end
+    end
+
+    return data
+end
+
+local function saveData(data)
+    local file = fs.open(settings_filename, "w")
+    if file then
+        for key, value in pairs(data) do
+            file.writeLine(key .. " = " .. value)
+        end
+        file.close()
+    end
+end
+
+-- Funktion zum Setzen eines Wertes für einen Schlüssel
+function settings_setValue(key, value)
+    local data = loadData()
+    data[key] = value
+    saveData(data)
+end
+
+-- Funktion zum Abrufen eines Wertes für einen Schlüssel
+function settings_getValue(key)
+    local data = loadData()
+    return data[key]
+end
+--------------------------------------------------------------------
+-- ENDE SETTINGS
+--------------------------------------------------------------------
 --------------------------------------------------------------------
 -- START SAVING
 --------------------------------------------------------------------
+local counter = 0
+local filename = "data.txt"
+
+
 function readLineFromFile(lineNumber)
     local file = fs.open(filename, "r")
     if not file then return nil end
@@ -328,6 +382,12 @@ function draw_text(label, address, status, on_iris_list)
             monitor.setTextColor(colors.red)
             monitor.write("UNSECURE")
         end
+        if findValue(address,"remote_iris_frequency") ~= "0000" and findValue(address,"remote_iris_code") ~= "0000" then
+            monitor.setTextColor(colors.green)
+            monitor.setCursorPos(14,5)
+            monitor.write("REM IRIS CONTROL")
+        end
+        monitor.setTextColor(colors.white)
     end
 end
 
@@ -335,9 +395,9 @@ end
 -- ENDE MONITOR
 --------------------------------------------------------------------
 --------------------------------------------------------------------
--- START EVENTHANDELING
+-- START MAIN EVENTHANDELING
 --------------------------------------------------------------------
-function get_address()
+function get_address(counter)
     raw_address = readLineFromFile(counter)
     if raw_address then
         label, address, on_iris_list = encode_line(raw_address)
@@ -348,11 +408,15 @@ function get_address()
     return label, address
 end
 
-
-counter = 1
-redstone_counter = 0
+counter = tonumber(settings_getValue("counter"))
+if counter then
+else
+    counter = 1
+end
 while true do
+    label, address = get_address(counter)
     event, param1, param2, param3, param4 =  os.pullEvent()
+    --print(event)
     --sleep(0.3)
     if event == "transceiver_transmission_received" then
         --interface.closeIris()
@@ -366,6 +430,7 @@ while true do
 
     elseif event == "stargate_incoming_wormhole" then
         if error_in_mod_is_fixed then
+            sleep(5)
             print("incoming_wormhole")
             remote_address = param1
             print(remote_address)
@@ -382,10 +447,17 @@ while true do
     elseif event == "stargate_outgoing_wormhole" then
         interface.openIris()
         if transceiver then
-            frequency = findValue(address, "remote_iris_frequency")
-            code = findValue(address, "remote_iris_code")
-            transceiver.setFrequency(frequency)
-            transceiver.setCurrentCode(code)
+            remote_frequency = tonumber(findValue(address, "remote_iris_frequency"))
+            remote_code = findValue(address, "remote_iris_code")
+            if not remote_frequency or not remote_code then
+                remote_frequency = 0000
+                remote_code = "1234"
+            end
+            print(remote_frequency)
+            print(remote_code)
+            transceiver.setFrequency(remote_frequency)
+            transceiver.setCurrentCode(remote_code)
+            sleep(8)
             transceiver.sendTransmission()
         end
 
@@ -405,10 +477,13 @@ while true do
         local input_iris = redstone.testBundledInput("back", colors.pink)
         local input_iris_mode = redstone.testBundledInput("back", colors.gray)
 
-        label, address = get_address()
     ---------------------------------------
         if input_settings then
             status = "Address Editing"
+        elseif input_iris_mode then
+            status = "Iris Editing"
+        else
+            status = ""
         end
         if input_reset then
             if input_settings then
@@ -416,20 +491,22 @@ while true do
                 print(label..", "..address.."deleted")
                 deleteLineFromFile(counter)
             elseif input_iris_mode then
-                print("Current: ".. frequenzy.. "Hz ".. code)
+                label, address = get_address(counter)
+                frequency = tonumber(findValue(address,"remote_iris_frequency"))
+                code = findValue(address,"remote_iris_code")
+                print("Current: ".. tostring(frequency).. "Hz ".. code)
                 print("Insert New Frequency:")
-                frequency = int(io.read())
-                print("Current: ".. frequenzy.. "Hz ".. code)
+                frequency = tonumber(io.read())
+                print("Current: ".. tostring(frequency).. "Hz ".. code)
                 print("Insert New Code:")
                 code = io.read()
-                update(counter, "remote_iris_frequency", frequency)
+                update(counter, "remote_iris_frequency", tostring(frequency))
                 update(counter, "remote_iris_code", code) 
+                print("Current: ".. tostring(frequency).. "Hz ".. code)
             else
                 counter = 1
+                settings_setValue("counter", counter)
                 interface.disconnectStargate()
-            end
-            while redstone.testBundledInput("back", colors.red) do
-                sleep(0.3)
             end
         end
     ---------------------------------------
@@ -439,9 +516,7 @@ while true do
             else
                 counter = counter + 1
             end
-            while redstone.testBundledInput("back", colors.black) do
-                sleep(0.3)
-            end
+            settings_setValue("counter", counter)
         end
     ---------------------------------------
         if input_back then
@@ -450,9 +525,7 @@ while true do
             else
                 counter = counter - 1
             end
-            while redstone.testBundledInput("back", colors.white) do
-                sleep(0.3)
-            end
+            settings_setValue("counter", counter)
         end
     ---------------------------------------
         if input_dial then
@@ -464,7 +537,25 @@ while true do
                 new_adress_str = "label="..new_label .. ",".. "address=" .. new_adress .. "," .. "on_iris_list=false,remote_iris_frequency=0000,remote_iris_code=0000",
                 print(new_adress_str)
                 addLineIntoFile(new_adress_str)
-            else
+            elseif input_iris_mode then
+                frequency = settings_getValue("iris_frequency")
+                code = settings_getValue("iris_code")
+                if not frequency or not code then
+                    frequency = 0000
+                    code = "1234"
+                end
+                print("Local Stargate Settings")
+                print("Current: ".. tostring(frequency).. "Hz ".. code)
+                print("Insert New Frequency:")
+                frequency = tonumber(io.read())
+                print("Local Stargate Settings")
+                print("Current: ".. tostring(frequency).. "Hz ".. code)
+                print("Insert New Code:")
+                code = io.read()
+                settings_setValue("iris_frequency",frequency)
+                settings_setValue("iris_code",code)
+                print("Current: ".. tostring(frequency).. "Hz ".. code)
+            elseif not input_iris_mode and not input_settings then
                 if interface.isStargateConnected() then
                     interface.disconnectStargate()
                 else
@@ -473,9 +564,6 @@ while true do
                     encoded_address = address_encode(address)
                     dial(encoded_address)
                 end
-            end
-            while redstone.testBundledInput("back", colors.lime) do
-                sleep(0.3)
             end
         end
     ---------------------------------------
@@ -499,5 +587,6 @@ while true do
         end
        ---------------------------------------
     end
-    draw_text(label, address, input_settings, on_iris_list)
+
+    draw_text(label, address, status, on_iris_list)
 end   
