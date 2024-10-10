@@ -53,5 +53,33 @@ Lime: dial / disconnect [MODE]: add a new address <br />
 The mode gets activated with a lever on the blue chanal
 
 **V2.2:** *(supports an iris)* <br />
-to toggle the iris set a redstonesignal to the oink channal
+to toggle the iris set a redstonesignal to the pink channal
+a switch at the gray channal enters a IRIS editing mode
+
+
+**Example Button Layout:**
+
+
+[Levers:]
+
+|¯¯¯¯¯¯¯¯|
+|  red   | = Address Editing
+|________|
+
+|¯¯¯¯¯¯¯¯|
+| gray   | = Iris Editing
+|________|
+
+
+[Buttons:]
+
+  #               |   [lime]   |   [white]   |    [red]    |   [black]   |   [pink]   |
+  -----           |    dial    |    back     |    reset    |    next     |    iris    |
+  Address Editing |   add new  |    back     |    delete   |    next     |  iris list |
+  iris Editing    | local iris |    back     | remote iris |    next     |    iris    |
+
+  local iris  = change local iris frequency and code
+  remote iris = change the frequency and code of a remote stargate (these will send automaticly after conecting to it)
+  iris list   = this will olen the local iris if dialed in by this address
+
 
